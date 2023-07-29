@@ -1,0 +1,15 @@
+#!/bin/bash
+
+printhelp()
+{
+   echo "formatBookJson: cat-log json helper"
+   echo "Syntax: formatBookJson rootIsbn"
+   echo "Valid OpenLibrary json data must be passed into this script via STDIN."
+}
+
+if [ ! -z "$1" ]; then
+	jq -j '."ISBN:'$1'"."details" | .title, "\t", .subtitle, "\t", .edition_name, "\t", .publish_date, "\t", (.authors[]|.name, ", "), "\t", .publishers[], "\t", .isbn_10[0], "\t", .isbn_13[0], "\t", .number_of_pages'
+else
+	printhelp
+	exit
+fi
