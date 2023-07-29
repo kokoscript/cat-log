@@ -22,20 +22,18 @@ then
     exit
 fi
 
-if [ "$1" = "bulk" ] && [ ! -z "$2" ]  && [ ! -z "$3" ]; then
-	if [ -f "$2" ]; then
-		if [ ! -f "$3" ]; then
+if [[ "$1" == "bulk" ]] && [[ -n "$3" ]]; then
+	if [[ -f "$2" ]]; then
+		if [[ ! -f "$3" ]]; then
 			echo 'Title	Subtitle	Edition	Date	Author(s)	Publisher(s)	ISBN-10	ISBN-13	Pages	Date Acquired	Finished?' > "$3"
 		fi
 		awk '{if (substr($1,1,1) != "=" && substr($1,1,1) != "") {cmd = "curl -s \"https://openlibrary.org/api/books?bibkeys=ISBN:"$1"&jscmd=details&format=json\" | ./formatBookJson "$1""; system(cmd); print ""}}' "$2" >> "$3"
-		# original command (bad, only works manually with fish):
-		# awk '{if (substr($1,1,1) != "=" && substr($1,1,1) != "") {cmd = "curl -s \"https://openlibrary.org/api/books?bibkeys=ISBN:"$1"&jscmd=details&format=json\" | jq -j \'.\"ISBN:"$1"\".\"details\" | .title, \"\\t\", .subtitle, \"\\t\", .edition_name, \"\\t\", .publish_date, \"\\t\", try ([.authors[].name] | join(\", \")), \"\\t\", try (.publishers | join(\", \")), \"\\t\", .isbn_10[0], \"\\t\", .isbn_13[0], \"\\t\", .number_of_pages\'"; system(cmd); print ""}}' "$2" > "$3"
 	else
 		echo "Input file $2 does not exist."
 		exit
 	fi
-elif [ "$1" = "add" ] && [ ! -z "$2" ] && [ ! -z "$3" ]; then
-	if [ ! -f "$3" ]; then
+elif [[ "$1" == "add" ]] && [[ -n "$3" ]]; then
+	if [[ ! -f "$3" ]]; then
 		echo 'Title	Subtitle	Edition	Date	Author(s)	Publisher(s)	ISBN-10	ISBN-13	Pages	Date Acquired	Finished?' > "$3"
 	fi
 	curl -s "https://openlibrary.org/api/books?bibkeys=ISBN:$2&jscmd=details&format=json" | ./formatBookJson "$2" >> "$3"
