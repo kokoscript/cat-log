@@ -25,7 +25,7 @@ fi
 if [[ "$1" == "bulk" ]] && [[ -n "$3" ]]; then
 	if [[ -f "$2" ]]; then
 		if [[ ! -f "$3" ]]; then
-			echo 'Title	Subtitle	Edition	Date	Author(s)	Publisher(s)	ISBN-10	ISBN-13	Pages	Date Acquired	Finished?' > "$3"
+			echo 'Title	Subtitle	Edition	Date	Author(s)	Publisher	ISBN-10	ISBN-13	Pages	Date Acquired	Finished?' > "$3"
 		fi
 		awk '{if (substr($1,1,1) != "=" && substr($1,1,1) != "") {cmd = "curl -s \"https://openlibrary.org/api/books?bibkeys=ISBN:"$1"&jscmd=details&format=json\" | ./formatBookJson "$1""; system(cmd); print ""}}' "$2" >> "$3"
 	else
@@ -34,7 +34,7 @@ if [[ "$1" == "bulk" ]] && [[ -n "$3" ]]; then
 	fi
 elif [[ "$1" == "add" ]] && [[ -n "$3" ]]; then
 	if [[ ! -f "$3" ]]; then
-		echo 'Title	Subtitle	Edition	Date	Author(s)	Publisher(s)	ISBN-10	ISBN-13	Pages	Date Acquired	Finished?' > "$3"
+		echo 'Title	Subtitle	Edition	Date	Author(s)	Publisher	ISBN-10	ISBN-13	Pages	Date Acquired	Finished?' > "$3"
 	fi
 	curl -s "https://openlibrary.org/api/books?bibkeys=ISBN:$2&jscmd=details&format=json" | ./formatBookJson "$2" >> "$3"
 	# fix missing newline

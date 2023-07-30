@@ -8,7 +8,7 @@ printhelp()
 }
 
 if [[ -n "$1" ]]; then
-	jq -j '."ISBN:'$1'"."details" | [.title, .subtitle, .edition_name, .publish_date, ([.authors[]|.name] | join(", ")), .publishers[], .isbn_10[0], .isbn_13[0], .number_of_pages] | @tsv'
+	jq -j '."ISBN:'$1'"."details" | [.title, .subtitle, .edition_name, .publish_date, ([.authors[]|.name] | join(", ")), .publishers[0], .isbn_10[0], .isbn_13[0], .number_of_pages] | @tsv'
 else
 	printhelp
 	exit
